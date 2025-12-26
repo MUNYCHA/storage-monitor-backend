@@ -7,18 +7,17 @@ public class SystemStorageSnapshotDto {
     private String serverName;
     private String serverIp;
     private LocalDateTime snapshotTime;
-    private List<PathStorageDto> pathStorageDtos;
+    private List<PathStorageDto> pathStorages;
 
     public SystemStorageSnapshotDto() {
     }
 
-    public SystemStorageSnapshotDto(String serverName, String serverIp, LocalDateTime snapshotTime, List<PathStorageDto> pathStorageDtos) {
+    public SystemStorageSnapshotDto(String serverName, String serverIp, LocalDateTime snapshotTime, List<PathStorageDto> pathStorages) {
         this.serverName = serverName;
         this.serverIp = serverIp;
         this.snapshotTime = snapshotTime;
-        this.pathStorageDtos = pathStorageDtos;
+        this.pathStorages = pathStorages;
     }
-
 
     public String getServerName() {
         return serverName;
@@ -32,8 +31,8 @@ public class SystemStorageSnapshotDto {
         return snapshotTime;
     }
 
-    public List<PathStorageDto> getPathStorageDtos() {
-        return pathStorageDtos;
+    public List<PathStorageDto> getPathStorages() {
+        return pathStorages;
     }
 
     public void setServerName(String serverName) {
@@ -48,7 +47,7 @@ public class SystemStorageSnapshotDto {
         this.snapshotTime = snapshotTime;
     }
 
-    public void setPathStorageDtos(List<PathStorageDto> pathStorageDtos) {
-        this.pathStorageDtos = pathStorageDtos;
+    public void setPathStorages(List<PathStorageDto> pathStorages) {
+        this.pathStorages = pathStorages;
     }
 }

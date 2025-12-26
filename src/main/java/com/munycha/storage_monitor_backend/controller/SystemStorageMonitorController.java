@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/system-storage-snapshot")
-public class SystemStorageSnapshotController {
+public class SystemStorageMonitorController {
     private final SystemStorageSnapshotService systemStorageSnapshotService;
 
-    public SystemStorageSnapshotController(SystemStorageSnapshotService systemStorageSnapshotService) {
+    public SystemStorageMonitorController(SystemStorageSnapshotService systemStorageSnapshotService) {
         this.systemStorageSnapshotService = systemStorageSnapshotService;
     }
 
