@@ -1,15 +1,15 @@
 package com.munycha.storage_monitor_backend.dto;
 
-public class PathStorageDto {
+public class ServerPathStorageUsageDto {
     private String path;
     private Long totalBytes;
     private Long usedBytes;
     private Double usedPercent;
 
-    public PathStorageDto() {
+    public ServerPathStorageUsageDto() {
     }
 
-    public PathStorageDto(String path, Long totalBytes, Long usedBytes, Double usedPercent) {
+    public ServerPathStorageUsageDto(String path, Long totalBytes, Long usedBytes, Double usedPercent) {
         this.path = path;
         this.totalBytes = totalBytes;
         this.usedBytes = usedBytes;

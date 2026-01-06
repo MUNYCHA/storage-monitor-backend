@@ -1,18 +1,17 @@
 package com.munycha.storage_monitor_backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Cleanup;
 
 @Entity
-@Table(name = "path_storage")
-public class PathStorageEntity {
+@Table(name = "server_path_storage_usage")
+public class ServerPathStorageUsageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "snapshot_id")
-    private Long snapshotId;
+    @Column(name = "server_storage_usage_id")
+    private Long serverStorageUsageId;
 
     @Column(name = "path", nullable = false)
     private String path;
@@ -27,19 +26,23 @@ public class PathStorageEntity {
     private Double usedPercent;
 
 
-    public PathStorageEntity() {
+    public ServerPathStorageUsageEntity() {
     }
 
-    public PathStorageEntity(Long snapshotId, String path, Long totalBytes, Long usedBytes, Double usedPercent) {
-        this.snapshotId = snapshotId;
+    public ServerPathStorageUsageEntity(Long serverStorageUsageId, String path, Long totalBytes, Long usedBytes, Double usedPercent) {
+        this.serverStorageUsageId = serverStorageUsageId;
         this.path = path;
         this.totalBytes = totalBytes;
         this.usedBytes = usedBytes;
         this.usedPercent = usedPercent;
     }
 
-    public Long getSnapshotId() {
-        return snapshotId;
+    public Long getId() {
+        return id;
+    }
+
+    public Long getServerStorageUsageId() {
+        return serverStorageUsageId;
     }
 
     public String getPath() {
@@ -58,8 +61,8 @@ public class PathStorageEntity {
         return usedPercent;
     }
 
-    public void setSnapshotId(Long snapshotId) {
-        this.snapshotId = snapshotId;
+    public void setServerStorageUsageId(Long serverStorageUsageId) {
+        this.serverStorageUsageId = serverStorageUsageId;
     }
 
     public void setPath(String path) {
