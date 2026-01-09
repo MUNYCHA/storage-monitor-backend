@@ -14,7 +14,7 @@ public class ServerStorageUsageQueryRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<ServerStorageUsageEntity> findLatestSystemStorageUsages() {
+    public List<ServerStorageUsageEntity> findLatestServerStorageUsages() {
 
         return entityManager
                 .createQuery(

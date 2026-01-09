@@ -1,10 +1,10 @@
 package com.munycha.storage_monitor_backend.service;
 
-import com.munycha.storage_monitor_backend.dto.ServerPathStorageUsageDto;
+import com.munycha.storage_monitor_backend.dto.MountPathStorageUsageDto;
 import com.munycha.storage_monitor_backend.dto.ServerStorageUsageDto;
 import com.munycha.storage_monitor_backend.entity.ServerStorageUsageEntity;
 import com.munycha.storage_monitor_backend.repository.crud.ServerStorageUsageRepository;
-import com.munycha.storage_monitor_backend.repository.query.ServerPathStorageUsageQueryRepository;
+import com.munycha.storage_monitor_backend.repository.query.MountPathStorageUsageQueryRepository;
 import com.munycha.storage_monitor_backend.repository.query.ServerStorageUsageQueryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -16,47 +16,42 @@ import java.util.List;
 public class ServerStorageUsageServiceImpl
         implements ServerStorageUsageService {
 
-    private final ServerStorageUsageRepository snapshotRepository;
-    private final ServerStorageUsageQueryRepository snapshotQueryRepository;
-    private final ServerPathStorageUsageQueryRepository pathStorageQueryRepository;
+    private final ServerStorageUsageRepository serverStorageUsageRepository;
+    private final ServerStorageUsageQueryRepository serverStorageUsageQueryRepository;
+    private final MountPathStorageUsageQueryRepository mountPathStorageUsageQueryRepository;
 
-    public ServerStorageUsageServiceImpl(
-            ServerStorageUsageRepository snapshotRepository,
-            ServerStorageUsageQueryRepository snapshotQueryRepository,
-            ServerPathStorageUsageQueryRepository pathStorageQueryRepository
-    ) {
-        this.snapshotRepository = snapshotRepository;
-        this.snapshotQueryRepository = snapshotQueryRepository;
-        this.pathStorageQueryRepository = pathStorageQueryRepository;
+    public ServerStorageUsageServiceImpl(ServerStorageUsageRepository serverStorageUsageRepository, ServerStorageUsageQueryRepository serverStorageUsageQueryRepository, MountPathStorageUsageQueryRepository mountPathStorageUsageQueryRepository) {
+        this.serverStorageUsageRepository = serverStorageUsageRepository;
+        this.serverStorageUsageQueryRepository = serverStorageUsageQueryRepository;
+        this.mountPathStorageUsageQueryRepository = mountPathStorageUsageQueryRepository;
     }
 
     @Override
-    public List<ServerStorageUsageDto> getSystemStorageUsages() {
+    public List<ServerStorageUsageDto> getServerStorageUsages() {
 
-        return snapshotRepository.findAll()
+        return serverStorageUsageRepository.findAll()
                 .stream()
-                .map(snapshot -> {
+                .map(serverUsage -> {
 
-                    // fetch path storages for THIS snapshot
-                    List<ServerPathStorageUsageDto> pathDtos =
-                            pathStorageQueryRepository
-                                    .findBySnapshotId(snapshot.getId())
+                    List<MountPathStorageUsageDto> mountPathUsages =
+                            mountPathStorageUsageQueryRepository
+                                    .findByServerStorageUsageId(serverUsage.getId())
                                     .stream()
-                                    .map(path -> new ServerPathStorageUsageDto(
-                                            path.getPath(),
-                                            path.getTotalBytes(),
-                                            path.getUsedBytes(),
-                                            path.getUsedPercent()
+                                    .map(mountPathUsage -> new MountPathStorageUsageDto(
+                                            mountPathUsage.getPath(),
+                                            mountPathUsage.getTotalBytes(),
+                                            mountPathUsage.getUsedBytes(),
+                                            mountPathUsage.getUsedPercent()
                                     ))
                                     .toList();
 
                     return new ServerStorageUsageDto(
-                            snapshot.getSystemId(),
-                            snapshot.getSystemName(),
-                            snapshot.getServerIp(),
-                            snapshot.getServerName(),
-                            snapshot.getCollectedAt(),
-                            pathDtos
+                            serverUsage.getSystemId(),
+                            serverUsage.getSystemName(),
+                            serverUsage.getServerIp(),
+                            serverUsage.getServerName(),
+                            serverUsage.getCollectedAt(),
+                            mountPathUsages
                     );
                 })
                 .toList();
@@ -64,57 +59,66 @@ public class ServerStorageUsageServiceImpl
 
 
 
+
     @Override
-    public ServerStorageUsageDto getSystemStorageUsageById(Long id) {
+    public ServerStorageUsageDto getServerStorageUsageById(Long id) {
 
-        ServerStorageUsageEntity snapshot = snapshotRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalStateException(
-                                "System storage snapshot not found: id=" + id)
-                );
+        ServerStorageUsageEntity serverStorageUsage =
+                serverStorageUsageRepository.findById(id)
+                        .orElseThrow(() ->
+                                new IllegalStateException(
+                                        "Server storage usage not found: id=" + id)
+                        );
 
-        return toDto(snapshot, mapPathStorages(snapshot.getId()));
+        return toDto(
+                serverStorageUsage,
+                mapMountPathStorageUsages(serverStorageUsage.getId())
+        );
     }
 
-    @Override
-    public List<ServerStorageUsageDto> getLatestSystemStorageUsages() {
 
-        return snapshotQueryRepository.findLatestSystemStorageUsages()
+    @Override
+    public List<ServerStorageUsageDto> getLatestServerStorageUsages() {
+
+        return serverStorageUsageQueryRepository.findLatestServerStorageUsages()
                 .stream()
                 .map(snapshot ->
                         toDto(
                                 snapshot,
-                                mapPathStorages(snapshot.getId())
+                                mapMountPathStorageUsages(snapshot.getId())
                         )
                 )
                 .toList();
     }
 
 
-    private List<ServerPathStorageUsageDto> mapPathStorages(Long snapshotId) {
-        return pathStorageQueryRepository.findBySnapshotId(snapshotId)
+    private List<MountPathStorageUsageDto> mapMountPathStorageUsages(Long serverStorageUsageId) {
+        return mountPathStorageUsageQueryRepository
+                .findByServerStorageUsageId(serverStorageUsageId)
                 .stream()
-                .map(entity -> new ServerPathStorageUsageDto(
-                        entity.getPath(),
-                        entity.getTotalBytes(),
-                        entity.getUsedBytes(),
-                        entity.getUsedPercent()
+                .map(mountPathUsage -> new MountPathStorageUsageDto(
+                        mountPathUsage.getPath(),
+                        mountPathUsage.getTotalBytes(),
+                        mountPathUsage.getUsedBytes(),
+                        mountPathUsage.getUsedPercent()
                 ))
                 .toList();
     }
 
+
     private ServerStorageUsageDto toDto(
-            ServerStorageUsageEntity snapshot,
-            List<ServerPathStorageUsageDto> pathStorages
+            ServerStorageUsageEntity serverStorageUsage,
+            List<MountPathStorageUsageDto> mountPathStorageUsages
     ) {
         return new ServerStorageUsageDto(
-                snapshot.getSystemId(),
-                snapshot.getSystemName(),
-                snapshot.getServerIp(),
-                snapshot.getServerName(),
-                snapshot.getCollectedAt(),
-                pathStorages
+                serverStorageUsage.getSystemId(),
+                serverStorageUsage.getSystemName(),
+                serverStorageUsage.getServerIp(),
+                serverStorageUsage.getServerName(),
+                serverStorageUsage.getCollectedAt(),
+                mountPathStorageUsages
         );
     }
+
 }
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ServerStorageUsageService {
 
-   List<ServerStorageUsageDto> getSystemStorageUsages();
-   ServerStorageUsageDto getSystemStorageUsageById(Long id);
-   List<ServerStorageUsageDto> getLatestSystemStorageUsages();
+   List<ServerStorageUsageDto> getServerStorageUsages();
+   ServerStorageUsageDto getServerStorageUsageById(Long id);
+   List<ServerStorageUsageDto> getLatestServerStorageUsages();
 }

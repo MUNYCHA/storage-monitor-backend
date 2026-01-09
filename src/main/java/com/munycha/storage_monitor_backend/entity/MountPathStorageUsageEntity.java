@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "server_path_storage_usage")
-public class ServerPathStorageUsageEntity {
+public class MountPathStorageUsageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +26,10 @@ public class ServerPathStorageUsageEntity {
     private Double usedPercent;
 
 
-    public ServerPathStorageUsageEntity() {
+    public MountPathStorageUsageEntity() {
     }
 
-    public ServerPathStorageUsageEntity(Long serverStorageUsageId, String path, Long totalBytes, Long usedBytes, Double usedPercent) {
+    public MountPathStorageUsageEntity(Long serverStorageUsageId, String path, Long totalBytes, Long usedBytes, Double usedPercent) {
         this.serverStorageUsageId = serverStorageUsageId;
         this.path = path;
         this.totalBytes = totalBytes;

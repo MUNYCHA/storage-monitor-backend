@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SystemStorageMonitorApplication {
+public class ServerStorageMonitorApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SystemStorageMonitorApplication.class, args);
+		SpringApplication.run(ServerStorageMonitorApp.class, args);
 	}
 
 }

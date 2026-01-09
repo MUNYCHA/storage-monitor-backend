@@ -9,18 +9,18 @@ public class ServerStorageUsageDto {
     private String serverIp;
     private String serverName;
     private LocalDateTime collectedAt;
-    private List<ServerPathStorageUsageDto> serverPathStorageUsages;
+    private List<MountPathStorageUsageDto> mountPathStorageUsages;
 
     public ServerStorageUsageDto() {
     }
 
-    public ServerStorageUsageDto(String systemId, String systemName, String serverIp, String serverName, LocalDateTime collectedAt, List<ServerPathStorageUsageDto> serverPathStorageUsages) {
+    public ServerStorageUsageDto(String systemId, String systemName, String serverIp, String serverName, LocalDateTime collectedAt, List<MountPathStorageUsageDto> mountPathStorageUsages) {
         this.systemId = systemId;
         this.systemName = systemName;
         this.serverIp = serverIp;
         this.serverName = serverName;
         this.collectedAt = collectedAt;
-        this.serverPathStorageUsages = serverPathStorageUsages;
+        this.mountPathStorageUsages = mountPathStorageUsages;
     }
 
     public String getSystemId() {
@@ -63,11 +63,11 @@ public class ServerStorageUsageDto {
         this.collectedAt = collectedAt;
     }
 
-    public List<ServerPathStorageUsageDto> getServerPathStorageUsages() {
-        return serverPathStorageUsages;
+    public List<MountPathStorageUsageDto> getMountPathStorageUsages() {
+        return mountPathStorageUsages;
     }
 
-    public void setServerPathStorageUsages(List<ServerPathStorageUsageDto> serverPathStorageUsages) {
-        this.serverPathStorageUsages = serverPathStorageUsages;
+    public void setMountPathStorageUsages(List<MountPathStorageUsageDto> mountPathStorageUsages) {
+        this.mountPathStorageUsages = mountPathStorageUsages;
     }
 }
