@@ -3,10 +3,12 @@ package com.munycha.storage_monitor_backend.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "server_storage_usage")
-public class ServerStorageUsageEntity {
+@Table(name = "server_storage_snapshot")
+public class ServerStorageSnapshotEntity {
 
     @Id
     @Column(name = "id")
@@ -25,20 +27,27 @@ public class ServerStorageUsageEntity {
     @Column(name = "server_name")
     private String serverName;
 
-
-
     @Column(name = "collected_at")
     private LocalDateTime collectedAt;
 
-    public ServerStorageUsageEntity() {
+    @OneToMany(mappedBy = "serverStorageSnapshot",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<MountPathStorageUsageEntity> mountPathStorageUsages = new ArrayList<>();
+
+    public void addMountPathStorageUsage(MountPathStorageUsageEntity mountPathStorageUsage){
+        mountPathStorageUsage.setServerStorageSnapshot(this);
+        this.mountPathStorageUsages.add(mountPathStorageUsage);
     }
 
-    public ServerStorageUsageEntity(String systemId, String systemName, String serverIp, String serverName, LocalDateTime collectedAt) {
+    public ServerStorageSnapshotEntity() {
+    }
+
+    public ServerStorageSnapshotEntity(String systemId, String systemName, String serverIp, String serverName, LocalDateTime collectedAt, List<MountPathStorageUsageEntity> mountPathStorageUsages) {
         this.systemId = systemId;
         this.systemName = systemName;
         this.serverIp = serverIp;
         this.serverName = serverName;
         this.collectedAt = collectedAt;
+        this.mountPathStorageUsages = mountPathStorageUsages;
     }
 
     public Long getId() {
@@ -65,6 +74,10 @@ public class ServerStorageUsageEntity {
         return collectedAt;
     }
 
+    public List<MountPathStorageUsageEntity> getMountPathStorageUsages() {
+        return mountPathStorageUsages;
+    }
+
     public void setSystemId(String systemId) {
         this.systemId = systemId;
     }
@@ -83,5 +96,9 @@ public class ServerStorageUsageEntity {
 
     public void setCollectedAt(LocalDateTime collectedAt) {
         this.collectedAt = collectedAt;
+    }
+
+    public void setMountPathStorageUsages(List<MountPathStorageUsageEntity> mountPathStorageUsages) {
+        this.mountPathStorageUsages = mountPathStorageUsages;
     }
 }

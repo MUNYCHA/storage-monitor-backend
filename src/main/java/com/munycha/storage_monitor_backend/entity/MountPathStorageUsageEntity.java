@@ -3,15 +3,12 @@ package com.munycha.storage_monitor_backend.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "server_path_storage_usage")
+@Table(name = "mount_path_storage_usage")
 public class MountPathStorageUsageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "server_storage_usage_id")
-    private Long serverStorageUsageId;
 
     @Column(name = "path", nullable = false)
     private String path;
@@ -25,24 +22,23 @@ public class MountPathStorageUsageEntity {
     @Column(name = "used_percent", nullable = false)
     private Double usedPercent;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "server_storage_snapshot_id")
+    private ServerStorageSnapshotEntity serverStorageSnapshot;
 
     public MountPathStorageUsageEntity() {
     }
 
-    public MountPathStorageUsageEntity(Long serverStorageUsageId, String path, Long totalBytes, Long usedBytes, Double usedPercent) {
-        this.serverStorageUsageId = serverStorageUsageId;
+    public MountPathStorageUsageEntity(String path, Long totalBytes, Long usedBytes, Double usedPercent, ServerStorageSnapshotEntity serverStorageSnapshot) {
         this.path = path;
         this.totalBytes = totalBytes;
         this.usedBytes = usedBytes;
         this.usedPercent = usedPercent;
+        this.serverStorageSnapshot = serverStorageSnapshot;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public Long getServerStorageUsageId() {
-        return serverStorageUsageId;
     }
 
     public String getPath() {
@@ -61,8 +57,8 @@ public class MountPathStorageUsageEntity {
         return usedPercent;
     }
 
-    public void setServerStorageUsageId(Long serverStorageUsageId) {
-        this.serverStorageUsageId = serverStorageUsageId;
+    public ServerStorageSnapshotEntity getServerStorageSnapshot() {
+        return serverStorageSnapshot;
     }
 
     public void setPath(String path) {
@@ -79,6 +75,10 @@ public class MountPathStorageUsageEntity {
 
     public void setUsedPercent(Double usedPercent) {
         this.usedPercent = usedPercent;
+    }
+
+    public void setServerStorageSnapshot(ServerStorageSnapshotEntity serverStorageSnapshot) {
+        this.serverStorageSnapshot = serverStorageSnapshot;
     }
 }
 

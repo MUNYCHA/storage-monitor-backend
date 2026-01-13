@@ -3,7 +3,7 @@ package com.munycha.storage_monitor_backend.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ServerStorageUsageDto {
+public class ServerStorageSnapshotDto {
     private String systemId;
     private String systemName;
     private String serverIp;
@@ -11,10 +11,10 @@ public class ServerStorageUsageDto {
     private LocalDateTime collectedAt;
     private List<MountPathStorageUsageDto> mountPathStorageUsages;
 
-    public ServerStorageUsageDto() {
+    public ServerStorageSnapshotDto() {
     }
 
-    public ServerStorageUsageDto(String systemId, String systemName, String serverIp, String serverName, LocalDateTime collectedAt, List<MountPathStorageUsageDto> mountPathStorageUsages) {
+    public ServerStorageSnapshotDto(String systemId, String systemName, String serverIp, String serverName, LocalDateTime collectedAt, List<MountPathStorageUsageDto> mountPathStorageUsages) {
         this.systemId = systemId;
         this.systemName = systemName;
         this.serverIp = serverIp;

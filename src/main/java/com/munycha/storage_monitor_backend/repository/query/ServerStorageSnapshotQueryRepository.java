@@ -1,7 +1,7 @@
 package com.munycha.storage_monitor_backend.repository.query;
 
 
-import com.munycha.storage_monitor_backend.entity.ServerStorageUsageEntity;
+import com.munycha.storage_monitor_backend.entity.ServerStorageSnapshotEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -9,29 +9,31 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ServerStorageUsageQueryRepository {
+public class ServerStorageSnapshotQueryRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<ServerStorageUsageEntity> findLatestServerStorageUsages() {
+    public List<ServerStorageSnapshotEntity> findLatestServerStorageSnapshots() {
 
         return entityManager
                 .createQuery(
                         """
-                        SELECT s
-                        FROM ServerStorageUsageEntity s
+                        SELECT DISTINCT s
+                        FROM ServerStorageSnapshotEntity s
+                        LEFT JOIN FETCH s.mountPathStorageUsages
                         WHERE s.collectedAt = (
                             SELECT MAX(s2.collectedAt)
-                            FROM ServerStorageUsageEntity s2
+                            FROM ServerStorageSnapshotEntity s2
                             WHERE s2.serverIp = s.serverIp
                               AND s2.systemId = s.systemId
                         )
                         """,
-                        ServerStorageUsageEntity.class
+                        ServerStorageSnapshotEntity.class
                 )
                 .getResultList();
     }
+
 
 
 }
