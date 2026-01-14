@@ -19,15 +19,16 @@ public class ServerStorageSnapshotQueryRepository {
         return entityManager
                 .createQuery(
                         """
-                        SELECT DISTINCT s
-                        FROM ServerStorageSnapshotEntity s
-                        LEFT JOIN FETCH s.mountPathStorageUsages
-                        WHERE s.collectedAt = (
-                            SELECT MAX(s2.collectedAt)
-                            FROM ServerStorageSnapshotEntity s2
-                            WHERE s2.serverIp = s.serverIp
-                              AND s2.systemId = s.systemId
-                        )
+                            SELECT DISTINCT s
+                                    FROM ServerStorageSnapshotEntity s
+                                    LEFT JOIN FETCH s.mountPathStorageUsages
+                                    WHERE s.collectedAt = (
+                                        SELECT MAX(s2.collectedAt)
+                                        FROM ServerStorageSnapshotEntity s2
+                                        WHERE s2.serverIp = s.serverIp
+                                          AND s2.systemId = s.systemId
+                                    )
+                                    ORDER BY s.systemName ASC, s.serverIp ASC
                         """,
                         ServerStorageSnapshotEntity.class
                 )
