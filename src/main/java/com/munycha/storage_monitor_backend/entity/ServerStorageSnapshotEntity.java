@@ -31,6 +31,7 @@ public class ServerStorageSnapshotEntity {
     private LocalDateTime collectedAt;
 
     @OneToMany(mappedBy = "serverStorageSnapshot",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @OrderBy("path ASC")
     private List<MountPathStorageUsageEntity> mountPathStorageUsages = new ArrayList<>();
 
     public void addMountPathStorageUsage(MountPathStorageUsageEntity mountPathStorageUsage){
