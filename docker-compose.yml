@@ -9,4 +9,6 @@ services:
       - DB_URL=${DB_URL}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
