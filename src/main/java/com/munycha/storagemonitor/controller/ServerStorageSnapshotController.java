@@ -1,7 +1,7 @@
-package com.munycha.storage_monitor_backend.controller;
+package com.munycha.storagemonitor.controller;
 
-import com.munycha.storage_monitor_backend.dto.ServerStorageSnapshotDto;
-import com.munycha.storage_monitor_backend.service.ServerStorageSnapshotService;
+import com.munycha.storagemonitor.dto.ServerStorageSnapshotDto;
+import com.munycha.storagemonitor.service.ServerStorageSnapshotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,20 +22,18 @@ public class ServerStorageSnapshotController {
         this.serverStorageSnapshotService = serverStorageSnapshotService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<ServerStorageSnapshotDto>> getServerStorageSnapshots() {
-        return ResponseEntity.ok(
-                serverStorageSnapshotService.getServerStorageSnapshots()
-        );
+        return ResponseEntity.ok(serverStorageSnapshotService.getServerStorageSnapshots());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ServerStorageSnapshotDto> getServerStorageSnapshotById(@PathVariable Long id){
-        return ResponseEntity.ok(this.serverStorageSnapshotService.getServerStorageSnapshotById(id));
+    public ResponseEntity<ServerStorageSnapshotDto> getServerStorageSnapshotById(@PathVariable Long id) {
+        return ResponseEntity.ok(serverStorageSnapshotService.getServerStorageSnapshotById(id));
     }
 
     @GetMapping("/latest")
-    public ResponseEntity<List<ServerStorageSnapshotDto>> getLatestServerStorageSnapshots(){
-        return ResponseEntity.ok(this.serverStorageSnapshotService.getLatestServerStorageSnapshots());
+    public ResponseEntity<List<ServerStorageSnapshotDto>> getLatestServerStorageSnapshots() {
+        return ResponseEntity.ok(serverStorageSnapshotService.getLatestServerStorageSnapshots());
     }
 }

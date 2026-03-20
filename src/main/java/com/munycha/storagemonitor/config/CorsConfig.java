@@ -1,4 +1,4 @@
-package com.munycha.storage_monitor_backend.config;
+package com.munycha.storagemonitor.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,4 +14,3 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedMethods("GET");
     }
 }
-
